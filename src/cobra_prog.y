@@ -10,6 +10,7 @@
 #include "cobra_array.h"
 #include "cobra_list.h"
 
+
 // parser for inline programs
 
 #define YYSTYPE	Lexptr
@@ -133,7 +134,7 @@ extern int	stream;
 extern int	stream_override;
 %}
 
-%token	NR STRING NAME IF IF2 ELSE WHILE FOR IN PRINT ARG SKIP GOTO
+%token	NR STRING NAME IF IF2 ELSE WHILE FOR IN JSON PRINT ARG SKIP GOTO
 %token	BREAK CONTINUE STOP NEXT_T BEGIN END SIZE RETRIEVE FUNCTION CALL
 %token	ROUND BRACKET CURLY LEN MARK SEQ LNR RANGE FNM FCT
 %token	BOUND NXT PRV JMP UNSET RETURN RE_MATCH FIRST_T LAST_T
@@ -212,6 +213,7 @@ b_stmnt	: p_lhs '=' expr { $2->lft = $1; $2->rgt = $3; $$ = $2; }
 	| GLOBAL glob_list	{ $$ = $1; handle_global($2); }
 	| GOTO   NAME		{ $1->lft = $2; $$ = $1; }
 	| PRINT args		{ $1->lft = $2; $$ = $1; }
+	| JSON args		{ $1->lft = $2; $$ = $1; }
 	| UNSET NAME '[' e_list ']' {
 			   $1->lft = $2;
 			   $1->rgt = $4;
@@ -415,6 +417,7 @@ static struct Keywords {
 	{ "newtok",	NEWTOK },
 	{ "Next",	NEXT_T },
 	{ "nxt",	NXT },
+	{ "json", 	JSON },
 	{ "print",	PRINT },
 	{ "prv",	PRV },
 	{ "range",	RANGE },
@@ -1561,6 +1564,104 @@ nr_marks_int(int a, const int ix)
 	nr_marks_range((void *) &ix);
 	return tokrange[ix]->param;
 }
+
+static void
+json_print_inner(Prim **ref_p, Lextok *q, Rtype *rv, const int ix)
+{	FILE *tfd = (track_fd) ? track_fd : stdout;
+
+	assert(ix >= 0 && ix < Ncore);
+	switch (q->typ) {
+	case ARG:
+		json_print_inner(ref_p, q->lft, rv, ix);
+		json_print_inner(ref_p, q->rgt, rv, ix);
+		return;
+	case MARKS:
+		eval_prog(ref_p, q->lft, rv, ix);
+		Assert("marks", rv->rtyp == VAL, q->lft);
+		rv->val = nr_marks_int(rv->val, ix);
+		fprintf(tfd, "%d", rv->val);
+		return;
+	case SIZE:
+		fprintf(tfd, "%d", q->rgt?array_sz(q->rgt->s, ix):0);
+		return;
+	case RETRIEVE:
+		eval_prog(ref_p, q->lft, rv, ix);
+		Assert("retrieve", rv->rtyp == VAL, q->lft);
+		fprintf(tfd, "%s", array_ix(q->rgt->s, rv->val, ix));
+		return;
+	case SUBSTR:
+		substr(ref_p, q, rv, ix);
+		fprintf(tfd, "%s", rv->s);
+		return;
+	case STRLEN:
+		eval_prog(ref_p, q->lft, rv, ix);
+		Assert("strlen", rv->rtyp == STR, q->lft);
+		rv->rtyp = VAL;
+		rv->val = (int) strlen(rv->s);
+		break;
+
+	case NAME:
+		if (q->rgt)	// q.? on q->rgt
+		{	eval_prog(ref_p, q->rgt, rv, ix);
+		} else		// string variable
+		{	eval_prog(ref_p, q, rv, ix);
+		}
+		break;
+	default:
+		eval_prog(ref_p, q, rv, ix);
+		break;
+	}
+
+	switch (rv->rtyp) {
+	case VAL:
+		fprintf(tfd, "%d", rv->val);
+		break;
+	case PTR:
+		fprintf(tfd, "%p", (void *) rv->ptr);
+		break;
+	case STR:
+		if (rv->s && strchr(rv->s, '\\'))
+		{ char *s;
+		  for (s = rv->s; *s != '\0'; s++)
+		  {	if (*s != '\\' || *(s+1) == '\\')
+			{	fprintf(tfd, "%c", *s);
+		  }	}
+		} else
+		{ fprintf(tfd, "%s", rv->s);
+		}
+		break;
+	default:
+		break; // cannot happen
+	}
+}
+
+static void
+json_print(Prim **ref_p, Lextok *q, Rtype *rv, const int ix)
+{	FILE *tfd = (track_fd) ? track_fd : stdout;
+
+	if (!first_json) printf(",\n");
+	first_json = 0;	
+
+	fprintf(tfd, "  { \"type\"\t:\t\"");
+	json_print_inner(ref_p, q->lft->rgt, rv, ix);
+	fprintf(tfd, "\",\n");
+
+	fprintf(tfd, "    \"message\"\t:\t\"");
+	json_print_inner(ref_p, q->rgt, rv, ix);
+	fprintf(tfd, "\",\n");
+
+	fprintf(tfd, "    \"file\"\t:\t\"");
+	json_print_inner(ref_p, q->lft->lft->lft, rv, ix);
+	fprintf(tfd, "\",\n");
+	
+	fprintf(tfd, "    \"line\"\t:\t");
+	json_print_inner(ref_p, q->lft->lft->rgt, rv, ix);
+	fprintf(tfd, "    \n");
+	
+	fprintf(tfd, "  }");
+
+}
+
 
 static void
 print_args(Prim **ref_p, Lextok *q, Rtype *rv, const int ix)
@@ -3061,6 +3162,11 @@ next:
 
 	case PRINT:
 		print_args(ref_p, q->lft, rv, ix);
+		fflush(stdout);
+		break;
+
+	case JSON:
+		json_print(ref_p, q->lft, rv, ix);
 		fflush(stdout);
 		break;
 

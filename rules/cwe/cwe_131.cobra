@@ -75,7 +75,7 @@ fcts
 		{	w_cnt++;
 		} else
 		{	lock();
-			print .fnm ":" .lnr ": cwe_131, missing sizeof() in memory allocation?\n";
+			json .fnm .lnr "CWE 131 advisory" "potential missing sizeof() in memory allocation";
 			unlock();
 		}
 		Next;

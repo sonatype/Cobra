@@ -1,0 +1,37 @@
+
+. basic.def
+
+def es76
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es76-avoid-goto
+	r;      # reset the marks
+	m goto; # mark all goto statements
+	>1;     # store current marks
+	m for;  # mark all for statements
+	n {;    # go to next open bracket 
+	s };    # strech the window to the matching closing bracket
+	c for;  # see if there is a nested loop in the window
+	n for;  # move the mark to the next for
+	n {;    # go to the next open bracket 
+	s };    # stretch window to the matching closing bracket
+	c goto; # retain the marks that contain a goto (in the nested loop)
+	n goto; # move the mark to that goto
+	> 2;    # store the marks (all goto statements in a nested loop
+	<1;     # load all the goto marks
+	<^2;    # remove all marks from 1 that are in nested loops
+	json es76-avoid-goto cpp\core\guidelines\-\avoid\goto;
+end
+
+def r10
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-mallocfree
+	r; 
+	m /alloc;
+	m free;
+	json r10-avoid-malloc-free cpp\core\guidelines\-\avoid\malloc\and\free;
+end
+
+def es50
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es50-dont-cast-away-const
+	r;
+	m const_cast;
+	json es50-avoid-const_cast cpp\core\guidelines\-\dont\cast\away\const;
+end

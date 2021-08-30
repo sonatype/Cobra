@@ -236,7 +236,6 @@ def m12rule13.5
 end
 
 def m12rule13.6
-	cpp on
 	r; m sizeof; n
 #	c /[-=\+\(]		# xxx false match on: sizeof( (array) )
 	%{
@@ -264,8 +263,7 @@ def m12rule13.6
 			. = .nxt;
 		}
 	%}
-	= "=== R13.6: (Mandatory) The operand of sizeof shall not have side effects:"
-	d
+	json misra-r13.6 The-operand-of-sizeof-shall-not-have-side-effects;
 end
 
 def m12rule15.1
@@ -385,10 +383,8 @@ def m12rule16.4
 end
 
 def m12rule16.6
-	cpp on
 	r; m switch; n {; c no case
-	= "=== R16.6: (Required) Every switch stmnt shall have at least two switch-clauses:"
-	d
+	json misra-r16.6 Every-switch-stmnt-shall-have at-least-two-switch-clauses;
 end
 
 def m12rule17.1

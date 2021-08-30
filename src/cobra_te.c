@@ -155,6 +155,8 @@ static int	p_matched;
 static int	nr_json;
 static int	has_positions;
 
+int		first_json = 1;
+
 static Nd_Stack *clone_nd_stack(Nd_Stack *);
 static int	 check_constraints(Nd_Stack *);
 static void	 clr_matches(int);
@@ -247,6 +249,11 @@ cleaned_up(const char *tp)
 static void
 json_match(const char *te, const char *msg, const char *f, int ln)
 {
+
+	if (!first_json) printf(",\n");
+	first_json = 0;
+	
+
 	printf("  { \"type\"\t:\t\"");
 	 cleaned_up(te);
 	printf("\",\n");
@@ -2209,7 +2216,7 @@ get_constraints(char *t)
 }
 
 void
-json(const char *te)
+json(const char *te, const char *msg)
 {	Prim *sop = (Prim *) 0;
 	Prim *q;
 	int seen = 0;
@@ -2227,7 +2234,7 @@ json(const char *te)
 	// the output is verbose for that match (or all, for a *)
 
 	memset(bvars, 0, sizeof(bvars));
-	printf("[\n");
+	//printf("[\n");
 	for (cur = prim; cur; cur = cur?cur->nxt:0)
 	{	if (cur->mark)
 		{	seen |= 2;
@@ -2258,7 +2265,15 @@ json(const char *te)
 			}	}
 			sprintf(json_msg, "lines %d..%d", sop->lnr, q?q->lnr:0);
 		}
-		json_match(te, json_msg, sop?sop->fnm:"", sop?sop->lnr:0);
+		
+		if (*msg == '\0')
+		{
+			json_match(te, json_msg, sop?sop->fnm:"", sop?sop->lnr:0);
+		} else
+		{
+			json_match(te, msg, sop?sop->fnm:"", sop?sop->lnr:0);
+		}
+		
 		seen |= 4;
 	}
 	if (seen == 2)	// saw marked tokens, but no patterns, find ranges to report
@@ -2274,10 +2289,17 @@ json(const char *te)
 				{	break;
 			}	}
 			sprintf(json_msg, "lines %d..%d", sop->lnr, cur?cur->lnr:0);
-			json_match(te, json_msg, sop?sop->fnm:"", sop?sop->lnr:0);
+			
+			if (*msg == '\0')
+			{
+				json_match(te, json_msg, sop?sop->fnm:"", sop?sop->lnr:0);
+			} else
+			{
+				json_match(te, msg, sop?sop->fnm:"", sop?sop->lnr:0);
+			}
 		}
 	}
-	printf("\n]\n");
+	//printf("\n]\n");
 }
 
 void
@@ -2849,14 +2871,14 @@ cobra_te(char *te, int and, int inv)	// fct is too long...
 		}
 		if (convert_matches(0))
 		{	if (json_format)
-			{	json(te);
+			{	json(te, "");
 				clear_matches();
 		}	}
 		rx = 0;
 	} else if (stream <= 0)	// not streaming
 	{	if (convert_matches(0) > 0)
 		{	if (json_format)
-			{	json(te);
+			{	json(te, "");
 			} else
 			{	display("", "");
 			}

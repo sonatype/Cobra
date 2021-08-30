@@ -77,9 +77,6 @@ fcts
 	if (0)
 	{	for (a in Target)
 		{	b = Target[a.txt];
-			lock();
-			print f.txt " :: " b.txt " :: " a.txt "\n";
-			unlock();
 	}	}
 
 	# now recheck function for casts and assignments
@@ -104,8 +101,7 @@ fcts
 							{	w_cnt++;
 							} else
 							{	lock();
-								print .fnm ":" .lnr ": cwe_197, in " f.txt ;
-								print "(), potential loss of information in cast of " .txt "\n";
+								json .fnm .lnr "CWE 197 advisory" "potential loss of information in cast";
 								unlock();
 			}	}	}	}	}
 		}
@@ -144,9 +140,7 @@ fcts
 						{	w_cnt++;
 						} else
 						{	lock();
-							print .fnm ":" .lnr ": cwe_197, in " f.txt ;
-							print "(), potential loss of information in assignment from '" .txt ;
-							print "' to '" dst.txt "' type: " x.txt " set at " x.fnm ":" x.lnr "\n";
+							json .fnm .lnr "CWE 197 advisory" "potential loss of information in assignment";
 							unlock();
 		}	}	}	}	}
 		. = .nxt;
@@ -159,7 +153,7 @@ fcts
 %{
 	if (terse && w_cnt > 0)
 	{	lock();
-		print "cwe_197: " w_cnt " warnings: potential loss of information in assignment or cast\n";
+		json .fnm .lnr "CWE 197 advisory" "potential loss of information in assignment or cast";
 		unlock();
 	}
 	w_cnt = 0;

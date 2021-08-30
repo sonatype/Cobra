@@ -142,20 +142,10 @@ m & (.curly > 0)
 				if (x.seq != 0)
 				{
 				lock();
-				print x.fnm ":" x.lnr ": cwe_119_2: array-index variable '";
-				print  x.txt "' has unchecked value\n";
+				json x.fnm x.lnr "CWE 119 advisory" "array-index variable has unchecked value";
 				unlock();
 	}	}	}	}
 
-	if (terse && w_cnt > 0)
-	{	lock();
-		print "cwe_119_2: " w_cnt " warnings: array-index variable has unchecked min/max value\n";
-		if (verbose || w_cnt < 10)
-		{	for (a in Files)
-			{	print "\t" a.txt ": " Files[a.txt] " warnings\n";
-		}	}
-		unlock();
-	}
 	w_cnt = 0;
 	unset IxVar;
 	unset Suspect;

@@ -37,8 +37,7 @@ n (	# move to start of fct param list
 		maxcnt++;
 	}
 	if (maxcnt >= 100)
-	{	# print .fnm ":" .lnr ": exceeded maxcnt\n";	# probably not a real fct
-		Next;
+	{	Next;
 	}
 	if (.txt != "{") { Next; }
 
@@ -94,8 +93,8 @@ n (	# move to start of fct param list
 							}
 						} else
 						{	lock();
-							print .fnm ":" .lnr ": cwe_119_3: min/max unchecked " ;
-							print "parameter value '" .txt "' used in array index\n";
+
+							json .fnm .lnr "CWE 119 advisory" "parameter value used in array index";
 							unlock();
 				}	}	}
 				. = .nxt;
@@ -112,15 +111,6 @@ n (	# move to start of fct param list
 %}
 
 %{
-	if (terse && w_cnt > 0)
-	{	lock();
-		print "cwe_119_3: " w_cnt " warnings: unchecked parameter value used in array index\n";
-		if (verbose || w_cnt < 10)
-		{	for (a in Files)
-			{	print "\t" a.txt ": " Files[a.txt] " warnings\n";
-		}	}
-		unlock();
-	}
 	w_cnt = 0;
 	l_cnt = 0;
 	unset Files;

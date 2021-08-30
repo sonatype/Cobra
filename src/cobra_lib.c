@@ -1546,7 +1546,6 @@ set_ncore(int n)
 static int
 pre_scan(char *bc)	// non-generic commands
 {	char *a, *b;
-
 	if (prog_fd)
 	{	if ((a = strstr(bc, "%}")) != NULL)
 		{	*a = ' ';
@@ -1989,9 +1988,11 @@ pre_scan(char *bc)	// non-generic commands
 			json_plus = (bc[4] == '+');
 			if (cnt > 0)
 			{	if (strlen(bc) > strlen("json "))
-				{	json(bc + strlen("json ") + json_plus);
+				{	a = nextarg(bc);
+					b = nextarg(a);
+					json(a, b);
 				} else
-				{	json(" ");
+				{	json("", "");
 			}	}
 			return 1;
 		} // else it maps to j[ump]
@@ -2009,7 +2010,6 @@ one_command(char *bc)
 	int i, n;
 	static int dfd = 0;
 	static char s[16];
-
 	if (strlen(bc) == 0)
 	{	return 1;
 	}

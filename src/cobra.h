@@ -150,7 +150,7 @@ extern void fct_defs(void);
 extern void fcts(char *, char *);
 extern void findfunction(char *, char *);
 extern void fix_imbalance(void);
-extern void json(const char *);
+extern void json(const char *, const char *);
 extern void list_checkers(void);
 extern void noreturn(void);
 extern void re_enable(void);
@@ -202,6 +202,8 @@ extern int json_plus;
 extern Prim *cur;
 extern Prim *plst;
 extern Prim *prim;
+
+extern int first_json;
 
 extern FList	**flist;
 extern TokRange	**tokrange;

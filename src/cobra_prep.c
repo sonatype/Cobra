@@ -1223,10 +1223,12 @@ RegEx:			  no_match = 1;		// -e -expr -re or -regex
 		case 'j':
 			  if (strcmp(argv[1], "-json") == 0)
 			  {	json_format = 1;
+				printf("[\n");
 				break;
 			  }
 			  if (strcmp(argv[1], "-json+") == 0)
 			  {	json_format = json_plus = 1;
+				printf("[\n");
 				break;
 			  }
 			  return usage(argv[1]);
@@ -1572,6 +1574,8 @@ cwe_mode:	no_match = 1;	// for consistency with -f
 	}
 	post_process(1);	// collect info from cores
 	cobra_main();		// cobra and cobra_checkers
+
+	if(json_format || json_plus) printf("\n]\n");
 
 	return 0;
 }

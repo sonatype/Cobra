@@ -100,9 +100,7 @@ m & {
 			} else
 			{	x = IndexVar[i.txt];
 				lock();
-				print x.fnm ":" x.lnr ": cwe_119_1: " ;
-				print "array-index variable '" i.txt "' modified multiple times in loop ";
-				print sol.lnr "-" eol.lnr "\n";
+				json x.fnm x.lnr "CWE 119 advisory" "array-index variable modified multiple times in loop";
 				unlock();
 			}
 			unset Modified[i.txt];
@@ -115,16 +113,6 @@ m & {
 %}
 
 %{
-	if (terse && w_cnt > 0)
-	{	lock();
-		print "cwe_119_1: " w_cnt " warnings: ";
-		print "array-index variable modified multiple times in loop\n";
-		if (verbose || w_cnt < 10)
-		{	for (a in Files)
-			{	print "\t" a.txt ": " Files[a.txt] " warnings\n";
-		}	}
-		unlock();
-	}
 	w_cnt = 0;
 	l_cnt = 0;
 	unset Files;
