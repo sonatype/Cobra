@@ -39,8 +39,7 @@ m & (.curly > 0)
 					if (x.seq != 0 && x.lnr <= zz.lnr)
 					{
 					lock();
-					print x.fnm ":" zz.lnr ": cwe_119_2: array-index variable '";
-					print  x.txt "' has unchecked value.\n";
+					json x.fnm zz.lnr "CWE 119 advisory" "array-index variable has unchecked value";
 					unlock();
 		}	}	}	}
 

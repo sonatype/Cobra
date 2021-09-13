@@ -68,7 +68,7 @@ N:
 					{	w_cnt++;
 					} else
 					{	lock();
-						print from.fnm ":" from.lnr ": cwe_416, use after free of " nm "?\n";
+						json from.fnm from.lnr "CWE 416 advisory" "potential use after free";
 						unlock();
 					}
 					canstop = 2;
@@ -272,7 +272,6 @@ N:
 %{
 	if (terse && w_cnt > 0)
 	{	lock();
-		print "cwe_416: " w_cnt " warnings: potential heap memory use after free\n";
 		unlock();
 	}
 	w_cnt = 0;

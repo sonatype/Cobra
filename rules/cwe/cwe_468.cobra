@@ -32,14 +32,13 @@
 	{	w_cnt++;
 	} else
 	{	lock();
-		print .fnm ":" .lnr ": cwe_468, risky cast using pointer arithmetic\n";
+		json .fnm .lnr "CWE 468 advisory" "risky cast using pointer arithmetic";
 		unlock();
 	}
 %}
 %{
 	if (terse && w_cnt > 0)
 	{	lock();
-		print "cwe_468: " w_cnt " warnings: risky cast using pointer arithmetic\n";
 		unlock();
 	}
 	w_cnt = 0;

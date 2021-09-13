@@ -35,3 +35,63 @@ def es50
 	m const_cast;
 	json es50-avoid-const_cast cpp\core\guidelines\-\dont\cast\away\const;
 end
+
+def es49
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es49-if-you-must-use-a-cast-use-a-named-cast
+	r;
+	m reinterpret_cast;
+	json es49-avoid-reinterpret_cast cpp\core\guidelines\-\avoid\use\of\reinterpret_cast;
+end
+
+
+def i2
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i2-avoid-non-const-global-variables
+	r;
+	m @type;
+	w (.curly==0 && .round==0);
+	>1;
+	e @ident =;
+	> 2;
+	<1;
+	e @ident \;;
+	<|2;
+	>1;
+	m const;
+	n;
+	s @ident;
+	w (.curly==0 );
+	>2; <1; <^2; >1;
+	m static;
+	w (.curly==0 );
+	n;
+	s @ident;
+	>2; <1; <^2;
+	> 1;
+	m static;
+	w (.curly==0);
+	n;
+	n;
+	s @ident;
+	>2; <1; <^2;
+	> 1;
+	m const;
+	w (.curly==0);
+	n;
+	n;
+	s @ident;
+	>2; <1; <^2;
+	> 1;
+	m extern;
+	w (.curly==0 );
+	n;
+	n;
+	s @ident;
+	>2; <1; <^2;
+	> 1;
+	m extern;
+	w (.curly==0 );
+	n;
+	s @ident;
+	>2; <1; <^2;
+	json i2-avoid-non-const-global-variables cpp\core\guidelines\-\avoid\non-const\global\variables;
+end

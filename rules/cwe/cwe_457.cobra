@@ -105,7 +105,7 @@ N:
 					{	w_cnt++;
 					} else
 					{	lock();
-						print from.fnm ":" from.lnr ": cwe_457, uninitialized var " nm "?\n";
+						json from.fnm from.lnr "CWE 457 advisory" "potential uninitialized variable";
 						unlock();
 					}
 					canstop = 2;
@@ -371,7 +371,6 @@ N:
 %{
 	if (terse && w_cnt > 0)
 	{	lock();
-		print "cwe-457: " w_cnt " warnings: potentially uninitialized variable\n";
 		unlock();
 	}
 	w_cnt = 0;

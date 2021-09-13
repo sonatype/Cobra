@@ -55,8 +55,7 @@ r
 				{	w_cnt++;
 				} else
 				{	lock();
-					print .fnm ":" .lnr ": cwe_170: '"  dst.txt;
-					print "' in strncpy may not be null terminated\n";
+					json .fnm .lnr "CWE 170 advisory" "strncpy may not be null terminated"; 
 					unlock();
 		}	}	}
 	} else
@@ -72,8 +71,7 @@ r
 				{	w_cnt++;
 				} else
 				{	lock();
-					print .fnm ":" .lnr ": cwe_170: '"  dst.txt;
-					print "' in strncpy may not be null terminated\n";
+					json .fnm .lnr "CWE 170 advisory" "strncpy may not be null terminated"; 
 					unlock();
 			}	}
 		}
@@ -82,7 +80,6 @@ r
 %{
 	if (terse && w_cnt > 0)
 	{	lock();
-		print "cwe_170: " w_cnt " warnings: destination in strncpy may not be null terminated\n";
 		unlock();
 	}
 	w_cnt = 0;
