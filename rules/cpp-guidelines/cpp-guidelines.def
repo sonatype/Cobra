@@ -43,6 +43,20 @@ def es49
 	json es49-avoid-reinterpret_cast cpp\core\guidelines\-\avoid\use\of\reinterpret_cast;
 end
 
+def sl1_1
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#slcon1-prefer-using-stl-array-or-vector-instead-of-a-c-array
+	r;
+	m new;
+	e @type \[; s \]; 
+	json sl1-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array;
+end
+
+def sl1_2
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#slcon1-prefer-using-stl-array-or-vector-instead-of-a-c-array
+	r;
+	m @type;
+	json sl1-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array;
+end
 
 def i2
 	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i2-avoid-non-const-global-variables
@@ -94,4 +108,22 @@ def i2
 	s @ident;
 	>2; <1; <^2;
 	json i2-avoid-non-const-global-variables cpp\core\guidelines\-\avoid\non-const\global\variables;
+end
+
+def u1
+	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#to-do-unclassified-proto-rules
+	# https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-init-variables.html
+	r;
+	m @type;
+	e @ident \;;
+	>1;
+	m extern;
+	n;
+	>2; <1; <^2;
+	>1;
+	m extern;
+	n;
+	n;
+	>2; <1; <^2;
+	json u1-always-init-local-variables cpp\core\guidelines\-\always\initialize\local\variables;
 end
