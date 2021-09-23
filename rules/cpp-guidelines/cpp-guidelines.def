@@ -55,7 +55,9 @@ def sl1_2
 	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#slcon1-prefer-using-stl-array-or-vector-instead-of-a-c-array
 	r;
 	m @type;
-	json sl1-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array;
+	e @ident \[;
+	s \];
+	json sl2-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array;
 end
 
 def i2
