@@ -8,7 +8,7 @@ quiet on
 . cwe/cwe_131.cobra
 . cwe/cwe_170.cobra
 . cwe/cwe_197.cobra
-. cwe/cwe_416.cobra
+# . cwe/cwe_416.cobra
 . cwe/cwe_457.cobra
 . cwe/cwe_468.cobra
 . cwe/cwe_805.cobra
