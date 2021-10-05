@@ -5,7 +5,7 @@ quiet on
 . cpp-guidelines/cpp-guidelines.def
 . misra/misra2012.def
 #. cwe/cwe_119.cobra
-. cwe/cwe_131.cobra
+# . cwe/cwe_131.cobra
 . cwe/cwe_170.cobra
 . cwe/cwe_197.cobra
 # . cwe/cwe_416.cobra
