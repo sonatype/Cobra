@@ -290,9 +290,11 @@ json_match(const char *te, const char *msg, const char *details, const char *f, 
 	cleaned_up(msg);
 	printf("\",\n");
 
-	printf("    \"details_url\":\t\"");
-	cleaned_up_url(details);
-	printf("\",\n");
+	if (*details != '\0') {
+		printf("    \"details_url\":\t\"");
+		cleaned_up_url(details);
+		printf("\",\n");
+	}
 
 	if (json_plus)
 	{	if (strlen(bvars) > 0)
