@@ -18,7 +18,7 @@ def es76
 	> 2;    # store the marks (all goto statements in a nested loop
 	<1;     # load all the goto marks
 	<^2;    # remove all marks from 1 that are in nested loops
-	json es76-avoid-goto cpp\core\guidelines\-\avoid\goto;
+	json es76-avoid-goto cpp\core\guidelines\-\avoid\goto https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#es76-avoid-goto;
 end
 
 def r10
@@ -26,21 +26,21 @@ def r10
 	r; 
 	m /alloc;
 	m free;
-	json r10-avoid-malloc-free cpp\core\guidelines\-\avoid\malloc\and\free;
+	json r10-avoid-malloc-free cpp\core\guidelines\-\avoid\malloc\and\free https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#Rr-mallocfree;
 end
 
 def es50
 	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es50-dont-cast-away-const
 	r;
 	m const_cast;
-	json es50-avoid-const_cast cpp\core\guidelines\-\dont\cast\away\const;
+	json es50-avoid-const_cast cpp\core\guidelines\-\dont\cast\away\const https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#es50-dont-cast-away-const;
 end
 
 def es49
 	# https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es49-if-you-must-use-a-cast-use-a-named-cast
 	r;
 	m reinterpret_cast;
-	json es49-avoid-reinterpret_cast cpp\core\guidelines\-\avoid\use\of\reinterpret_cast;
+	json es49-avoid-reinterpret_cast cpp\core\guidelines\-\avoid\use\of\reinterpret_cast https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#es49-if-you-must-use-a-cast-use-a-named-cast;
 end
 
 def sl1_1
@@ -48,7 +48,7 @@ def sl1_1
 	r;
 	m new;
 	e @type \[; s \]; 
-	json sl1-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array;
+	json sl1-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#slcon1-prefer-using-stl-array-or-vector-instead-of-a-c-array;
 end
 
 def sl1_2
@@ -57,7 +57,7 @@ def sl1_2
 	m @type;
 	e @ident \[;
 	s \];
-	json sl2-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array;
+	json sl2-dont-use-c-array cpp\core\guidelines\-\prefer\STL\array\or\vector\over\C\array https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#slcon1-prefer-using-stl-array-or-vector-instead-of-a-c-array;
 end
 
 def i2
@@ -109,7 +109,7 @@ def i2
 	n;
 	s @ident;
 	>2; <1; <^2;
-	json i2-avoid-non-const-global-variables cpp\core\guidelines\-\avoid\non-const\global\variables;
+	json i2-avoid-non-const-global-variables cpp\core\guidelines\-\avoid\non-const\global\variables https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#i2-avoid-non-const-global-variables;
 end
 
 def u1
@@ -127,5 +127,5 @@ def u1
 	n;
 	n;
 	>2; <1; <^2;
-	json u1-always-init-local-variables cpp\core\guidelines\-\always\initialize\local\variables;
+	json u1-always-init-local-variables cpp\core\guidelines\-\always\initialize\local\variables https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines\#to-do-unclassified-proto-rules;
 end

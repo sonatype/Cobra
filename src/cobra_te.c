@@ -256,7 +256,26 @@ cleaned_up(const char *tp)
 }
 
 static void
-json_match(const char *te, const char *msg, const char *f, int ln)
+cleaned_up_url(const char *tp)
+{	const char *p = tp;
+
+	while (p && *p != '\0')
+	{	switch (*p) {
+		case '\\':	// strip, \ or " characters
+			break;
+		case '"':
+			printf("\\");	// insert escape
+			// fall thru
+		default:
+			printf("%c", *p);
+			break;
+		}
+		p++;
+	}
+}
+
+static void
+json_match(const char *te, const char *msg, const char *details, const char *f, int ln)
 {
 
 	if (!first_json) printf(",\n");
@@ -264,11 +283,15 @@ json_match(const char *te, const char *msg, const char *f, int ln)
 	
 
 	printf("  { \"type\"\t:\t\"");
-	 cleaned_up(te);
+	cleaned_up(te);
 	printf("\",\n");
 
 	printf("    \"message\"\t:\t\"");
-	 cleaned_up(msg);
+	cleaned_up(msg);
+	printf("\",\n");
+
+	printf("    \"detailsUrl\":\t\"");
+	cleaned_up_url(details);
 	printf("\",\n");
 
 	if (json_plus)
@@ -291,7 +314,7 @@ te_error(const char *s)
 	if (json_format)
 	{	memset(bvars, 0, sizeof(bvars));
 		sprintf(json_msg, "\"error: %.110s\"", s);
-		json_match(glob_te, json_msg, "", 0);	// error
+		json_match(glob_te, json_msg, "", "", 0);	// error
 	} else
 	{	fprintf(stderr, "error: %s\n", s);
 	}
@@ -1544,7 +1567,7 @@ add_match(Prim *f, Prim *t, Store *bd)
 					}
 					strcat(bvars, b->ref->txt);
 			}	}
-			json_match(glob_te, json_msg, f?f->fnm:"", f?f->lnr:0);
+			json_match(glob_te, json_msg, "", f?f->fnm:"", f?f->lnr:0);
 			printf("}");
 			nr_json++;
 		} else
@@ -2568,7 +2591,7 @@ setname(char *s)
 }
 
 void
-json(const char *te, const char *msg)
+json(const char *te, const char *msg, const char *details)
 {	Prim *sop = (Prim *) 0;
 	Prim *q;
 	int seen = 0;
@@ -2620,10 +2643,10 @@ json(const char *te, const char *msg)
 		
 		if (*msg == '\0')
 		{
-			json_match(te, json_msg, sop?sop->fnm:"", sop?sop->lnr:0);
+			json_match(te, json_msg, details, sop?sop->fnm:"", sop?sop->lnr:0);
 		} else
 		{
-			json_match(te, msg, sop?sop->fnm:"", sop?sop->lnr:0);
+			json_match(te, msg, details, sop?sop->fnm:"", sop?sop->lnr:0);
 		}
 		
 		seen |= 4;
@@ -2644,10 +2667,10 @@ json(const char *te, const char *msg)
 			
 			if (*msg == '\0')
 			{
-				json_match(te, json_msg, sop?sop->fnm:"", sop?sop->lnr:0);
+				json_match(te, json_msg, details, sop?sop->fnm:"", sop?sop->lnr:0);
 			} else
 			{
-				json_match(te, msg, sop?sop->fnm:"", sop?sop->lnr:0);
+				json_match(te, msg, details, sop?sop->fnm:"", sop?sop->lnr:0);
 			}
 		}
 	}
@@ -3065,7 +3088,7 @@ cobra_te(char *te, int and, int inv)	// fct is too long...
 							  { sprintf(json_msg, "\"re error for . (S%d->S%d)\"",
 								s->seq, t->dest);
 							    memset(bvars, 0, sizeof(bvars));
-							    json_match(te, json_msg, cur->fnm, cur->lnr); // error
+							    json_match(te, json_msg, "", cur->fnm, cur->lnr); // error
 							  } else
 							  { printf("%s:%d: re error for . (s%d->s%d) <%p>\n",
 								cur->fnm, cur->lnr,
@@ -3432,14 +3455,14 @@ cobra_te(char *te, int and, int inv)	// fct is too long...
 		}
 		if (convert_matches(0))
 		{	if (json_format)
-			{	json(te, "");
+			{	json(te, "", "");
 				clear_matches();
 		}	}
 		rx = 0;
 	} else if (stream <= 0)	// not streaming
 	{	if (convert_matches(0) > 0)
 		{	if (json_format)
-			{	json(te, "");
+			{	json(te, "", "");
 			} else
 			{	display("", "");
 			}

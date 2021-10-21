@@ -1571,7 +1571,7 @@ set_ncore(int n)
 
 static int
 pre_scan(char *bc)	// non-generic commands
-{	char *a, *b;
+{	char *a, *b, *ca;
 	if (prog_fd)
 	{	if ((a = strstr(bc, "%}")) != NULL)
 		{	*a = ' ';
@@ -2069,9 +2069,10 @@ pre_scan(char *bc)	// non-generic commands
 			{	if (strlen(bc) > strlen("json "))
 				{	a = nextarg(bc);
 					b = nextarg(a);
-					json(a, b);
+					ca = nextarg(b);
+					json(a, b, ca);
 				} else
-				{	json("", "");
+				{	json("", "", "");
 			}	}
 			return 1;
 		} // else it maps to j[ump]
