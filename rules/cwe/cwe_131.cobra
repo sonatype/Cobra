@@ -114,11 +114,6 @@ fcts
 			{	b_cnt++;
 			} else
 			{	lock();
-				print q.fnm ":" q.lnr ": cwe_131, out of bound array indexing error on " nmm.txt "?\n";
-				if (bname.txt != "malloc")
-				{	print q.fnm ":" q.lnr ": cwe_131, array " bname.txt;
-					print " was allocated at " bname.fnm ":" bname.lnr "\n";
-				}
 				unlock();
 			}
 		}
@@ -130,12 +125,6 @@ fcts
 %{
 	if (terse)
 	{	lock();
-		if (w_cnt > 0)
-		{	print "cwe_131: " w_cnt " warnings: missing sizeof() in memory allocation?\n";
-		}
-		if (b_cnt > 0)
-		{	print "cwe_131: " b_cnt " warnings: potential out of bound array indexing\n";
-		}
 		unlock();
 	}
 	w_cnt = 0;
